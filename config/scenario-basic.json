@@ -1,0 +1,21 @@
+{
+  "dns": [
+    { "type": "A", "name": "web.local", "value": "10.0.2.10" }
+  ],
+  "routers": {
+    "R1": {
+      "interfaces": ["192.168.1.1"],
+      "routes": [
+        { "dest": "10.0.0.0/24", "next_hop": "10.0.2.1", "interface": "eth1" },
+        { "dest": "0.0.0.0/0", "next_hop": "10.0.254.1", "interface": "eth0" }
+      ]
+    },
+    "R2": {
+      "interfaces": ["10.0.2.1"],
+      "routes": [
+        { "dest": "10.0.2.0/24", "next_hop": "10.0.2.10", "interface": "eth0" }
+      ]
+    }
+  },
+  "firewall": []
+}

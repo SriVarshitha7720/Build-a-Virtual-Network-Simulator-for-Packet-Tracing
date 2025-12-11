@@ -1,0 +1,28 @@
+{
+  "dns": [
+    { "type": "CNAME", "name": "www.example.com", "value": "example.com" },
+    { "type": "A", "name": "example.com", "value": "172.16.5.20" },
+    { "type": "A", "name": "api.internal", "value": "10.10.0.50" }
+  ],
+  "routers": {
+    "Edge": {
+      "interfaces": ["192.168.100.1"],
+      "routes": [
+        { "dest": "10.10.0.0/16", "next_hop": "172.16.1.2", "interface": "wan0" },
+        { "dest": "172.16.0.0/16", "next_hop": "172.16.1.2", "interface": "wan0" }
+      ]
+    },
+    "Core": {
+      "interfaces": ["172.16.1.2"],
+      "routes": [
+        { "dest": "172.16.5.0/24", "next_hop": "172.16.5.20", "interface": "eth1" },
+        { "dest": "10.10.0.0/16", "next_hop": "10.10.0.50", "interface": "eth2" }
+      ]
+    }
+  },
+  "firewall": [
+    { "action": "deny", "protocol": "TCP", "src": "0.0.0.0/0", "dst_port": "22", "apply_to": "Edge" },
+    { "action": "deny", "protocol": "TCP", "src": "192.168.100.0/24", "dst_port": "8000-9000", "apply_to": "Edge" },
+    { "action": "allow", "protocol": "ANY", "src": "0.0.0.0/0", "dst_port": "any" }
+  ]
+}
